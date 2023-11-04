@@ -15,7 +15,8 @@ services:
     networks:
       - thirtybees-net
   php:
-    image: php:8.0-fpm
+    # image: php:8.0-fpm
+    image: .
     container_name: php-fpm
     volumes:
       - ./www:/var/www/default
@@ -24,14 +25,14 @@ services:
       - thirtybees-net
 
   database:
-    image: mariadb
+    image: mariadb:10
     container_name: thirtybees-db
     environment:
       - MYSQL_DATABASE=thirtybees
       - MYSQL_USER=thirtybees
       - MYSQL_PASSWORD=thirtybees
       - MYSQL_ROOT_PASSWORD=thirtybees_root
-      - TZ=Europe/Madrid
+      - TZ=Europe/Amsterdam
       - PUID=1000
       - PGID=1000
     volumes:
