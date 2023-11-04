@@ -1,0 +1,46 @@
+#
+
+services:
+  web:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "10010:80/tcp"
+    volumes:
+      - ./www:/var/www/default
+      # - ./config/nginx/conf.d:/etc/nginx/conf.d
+      # - /home/debian/docker-data/nginx/php:/var/www/default
+      # - /home/debian/docker-data/nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: unless-stopped
+    networks:
+      - thirtybees-net
+  php:
+    image: php:8.0-fpm
+    container_name: php-fpm
+    volumes:
+      - ./www:/var/www/default
+      # - /home/debian/docker-data/nginx/php:/var/www/default
+    networks:
+      - thirtybees-net
+
+  database:
+    image: mariadb
+    container_name: thirtybees-db
+    environment:
+      - MYSQL_DATABASE=thirtybees
+      - MYSQL_USER=thirtybees
+      - MYSQL_PASSWORD=thirtybees
+      - MYSQL_ROOT_PASSWORD=thirtybees_root
+      - TZ=Europe/Madrid
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./thirtybees-db:/config
+      # - /home/debian/docker-data/thirtybees-db:/config
+    restart: unless-stopped
+    networks:
+      - thirtybees-net
+
+networks:
+  thirtybees-net:
+    name: thirtybees-net
